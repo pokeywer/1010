@@ -3,80 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melencion Luau Obfuscator</title>
+    <title>VoidedX | Premier Luau Protection</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar Controls -->
-        <aside class="sidebar">
+        <!-- Top Mobile Header -->
+        <header class="mobile-header">
             <div class="brand">
-                <i class="fa-solid fa-shield-halved brand-icon"></i>
+                <i class="fa-solid fa-terminal brand-icon"></i>
+                <h2>VoidedX</h2>
+            </div>
+            <button id="mobile-menu-toggle" class="icon-btn">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
+        </header>
+
+        <!-- Sidebar Controls -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand desktop-only">
+                <i class="fa-solid fa-terminal brand-icon"></i>
                 <div>
-                    <h2>Melencion VM</h2>
-                    <span class="badge">v2.4 Luau Engine</span>
+                    <h2>VoidedX</h2>
+                    <span class="badge">Luau Core v5.1</span>
                 </div>
             </div>
 
             <div class="section">
-                <label class="section-title">Security Preset</label>
+                <label class="section-title">Security Level</label>
                 <div class="preset-grid">
-                    <button class="preset-btn" data-level="low">Low</button>
+                    <button class="preset-btn" data-level="light">Light</button>
                     <button class="preset-btn" data-level="medium">Medium</button>
-                    <button class="preset-btn active" data-level="high">High</button>
-                    <button class="preset-btn luraph" data-level="extreme">Luraph VM</button>
+                    <button class="preset-btn" data-level="hard">Hard</button>
+                    <button class="preset-btn active voidedx-max" data-level="max">VoidedX Max</button>
                 </div>
             </div>
 
             <div class="section">
-                <label class="section-title">Protections</label>
+                <label class="section-title">Protection Modules</label>
                 <div class="options-list">
                     <label class="toggle-option">
-                        <input type="checkbox" id="opt-rename" checked>
+                        <input type="checkbox" id="opt-vm" checked>
                         <span class="toggle-slider"></span>
-                        <span class="label-text">Variable Mangling</span>
+                        <span class="label-text">Bytecode Virtual Machine</span>
                     </label>
 
                     <label class="toggle-option">
                         <input type="checkbox" id="opt-strings" checked>
                         <span class="toggle-slider"></span>
-                        <span class="label-text">String Byte Encoding</span>
-                    </label>
-
-                    <label class="toggle-option">
-                        <input type="checkbox" id="opt-numbers" checked>
-                        <span class="toggle-slider"></span>
-                        <span class="label-text">Number Arithmetic Obfuscation</span>
-                    </label>
-
-                    <label class="toggle-option">
-                        <input type="checkbox" id="opt-junk" checked>
-                        <span class="toggle-slider"></span>
-                        <span class="label-text">Dead Code / Junk Injection</span>
-                    </label>
-
-                    <label class="toggle-option">
-                        <input type="checkbox" id="opt-vm" checked>
-                        <span class="toggle-slider"></span>
-                        <span class="label-text">XOR Virtual Machine Wrapper</span>
+                        <span class="label-text">Bytecode String Protection</span>
                     </label>
 
                     <label class="toggle-option">
                         <input type="checkbox" id="opt-anti-dump" checked>
                         <span class="toggle-slider"></span>
-                        <span class="label-text">Anti-Decompile & Anti-Dump</span>
+                        <span class="label-text">Anti-Decompile & Anti-Hook</span>
+                    </label>
+
+                    <label class="toggle-option">
+                        <input type="checkbox" id="opt-rename" checked>
+                        <span class="toggle-slider"></span>
+                        <span class="label-text">Identifier Mangling</span>
+                    </label>
+
+                    <label class="toggle-option">
+                        <input type="checkbox" id="opt-opaque" checked>
+                        <span class="toggle-slider"></span>
+                        <span class="label-text">Opaque Predicates (Fake Flow)</span>
+                    </label>
+
+                    <label class="toggle-option">
+                        <input type="checkbox" id="opt-bloat" checked>
+                        <span class="toggle-slider"></span>
+                        <span class="label-text">Massive Bloater (5k-10k Lines)</span>
                     </label>
                 </div>
             </div>
 
             <div class="section">
-                <label class="section-title" for="watermark-input">Watermark Header</label>
-                <input type="text" id="watermark-input" class="text-input" value="Protected by Melencion Obfuscator">
+                <label class="section-title">Watermark Header (Locked)</label>
+                <div class="locked-input-wrapper">
+                    <input type="text" class="text-input" value="--[[ Protected by VoidedX Security Engine ]]" disabled readonly>
+                    <i class="fa-solid fa-lock lock-icon"></i>
+                </div>
             </div>
 
             <button id="obfuscate-btn" class="primary-btn">
-                <i class="fa-solid fa-lock"></i> Obfuscate Script
+                <i class="fa-solid fa-shield-halved"></i> Protect Script
             </button>
         </aside>
 
@@ -84,8 +98,9 @@
         <main class="workspace">
             <header class="topbar">
                 <div class="stats-group">
+                    <div class="stat"><span class="stat-label">Lines:</span> <span id="stat-lines">0</span></div>
                     <div class="stat"><span class="stat-label">Original:</span> <span id="stat-orig-size">0 B</span></div>
-                    <div class="stat"><span class="stat-label">Obfuscated:</span> <span id="stat-obf-size">0 B</span></div>
+                    <div class="stat"><span class="stat-label">Output:</span> <span id="stat-obf-size">0 B</span></div>
                     <div class="stat"><span class="stat-label">Ratio:</span> <span id="stat-ratio">0x</span></div>
                     <div class="stat"><span class="stat-label">Time:</span> <span id="stat-time">0ms</span></div>
                 </div>
@@ -94,7 +109,7 @@
             <div class="editors-container">
                 <div class="editor-box">
                     <div class="editor-header">
-                        <span><i class="fa-solid fa-code"></i> Input Luau Script</span>
+                        <span><i class="fa-solid fa-code"></i> Source Luau Code</span>
                         <button class="icon-btn" id="clear-input-btn" title="Clear Input"><i class="fa-solid fa-trash"></i></button>
                     </div>
                     <textarea id="input-code" placeholder="-- Paste your Luau / Roblox script here...&#10;print('Hello World!')" spellcheck="false"></textarea>
@@ -102,13 +117,13 @@
 
                 <div class="editor-box">
                     <div class="editor-header">
-                        <span><i class="fa-solid fa-file-shield"></i> Obfuscated Output</span>
+                        <span><i class="fa-solid fa-file-shield"></i> Protected Output</span>
                         <div class="actions">
-                            <button class="icon-btn" id="copy-btn" title="Copy Code"><i class="fa-solid fa-copy"></i></button>
-                            <button class="icon-btn" id="download-btn" title="Download File"><i class="fa-solid fa-download"></i></button>
+                            <button class="icon-btn" id="copy-btn" title="Copy Output"><i class="fa-solid fa-copy"></i></button>
+                            <button class="icon-btn" id="download-btn" title="Download Lua"><i class="fa-solid fa-download"></i></button>
                         </div>
                     </div>
-                    <textarea id="output-code" readonly placeholder="-- Obfuscated output will appear here..." spellcheck="false"></textarea>
+                    <textarea id="output-code" readonly placeholder="-- Protected output will appear here..." spellcheck="false"></textarea>
                 </div>
             </div>
         </main>
